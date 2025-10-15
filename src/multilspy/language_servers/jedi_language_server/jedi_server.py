@@ -25,6 +25,9 @@ class JediServer(LanguageServer):
         """
         Creates a JediServer instance. This class is not meant to be instantiated directly. Use LanguageServer.create() instead.
         """
+        if config.environment_path:
+            self.environment_path = config.environment_path
+
         super().__init__(
             config,
             logger,
@@ -54,6 +57,9 @@ class JediServer(LanguageServer):
 
         assert d["workspaceFolders"][0]["name"] == "$name"
         d["workspaceFolders"][0]["name"] = os.path.basename(repository_absolute_path)
+
+        if self.environment_path:
+            d["initializationOptions"]["workspace"]["environmentPath"] = self.environment_path
 
         return d
 
